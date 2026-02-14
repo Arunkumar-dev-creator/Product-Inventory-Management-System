@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product Inventory Management</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Product Inventory Management</h1>
+        <p class="subtitle">CRUD + LocalStorage — HTML, CSS, JavaScript</p>
+      </header>
+
+      <section class="controls">
+        <form id="product-form" class="product-form">
+          <input type="hidden" id="product-id" />
+          <div class="row">
+            <label>
+              Product Name
+              <input
+                id="product-name"
+                type="text"
+                placeholder="e.g. Wireless Mouse"
+                required
+              />
+            </label>
+            <label>
+              Category
+              <input
+                id="product-category"
+                type="text"
+                placeholder="e.g. Electronics"
+              />
+            </label>
+          </div>
+          <div class="row">
+            <label>
+              Price (₹)
+              <input
+                id="product-price"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="e.g. 599.99"
+                required
+              />
+            </label>
+            <label>
+              Quantity
+              <input
+                id="product-qty"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="e.g. 10"
+                required
+              />
+            </label>
+          </div>
+
+          <div class="row actions">
+            <button id="save-btn" type="submit">Add Product</button>
+            <button id="clear-btn" type="button" class="secondary">
+              Clear
+            </button>
+          </div>
+        </form>
+
+        <div class="tools">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search by name or category..."
+          />
+          <select id="sort">
+            <option value="created_desc">Newest first</option>
+            <option value="created_asc">Oldest first</option>
+            <option value="name_asc">Name A → Z</option>
+            <option value="name_desc">Name Z → A</option>
+            <option value="price_asc">Price Low → High</option>
+            <option value="price_desc">Price High → Low</option>
+            <option value="qty_asc">Qty Low → High</option>
+            <option value="qty_desc">Qty High → Low</option>
+          </select>
+
+          <button id="export-btn" class="secondary">Export JSON</button>
+          <input
+            id="import-file"
+            type="file"
+            accept="application/json"
+            style="display: none"
+          />
+          <button id="import-btn" class="secondary">Import JSON</button>
+          <button id="clear-all" class="danger">Clear All</button>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div>Total Products: <span id="total-count">0</span></div>
+        <div>Total Inventory Value: ₹<span id="total-value">0.00</span></div>
+      </section>
+
+      <section class="table-wrap">
+        <table id="product-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Price (₹)</th>
+              <th>Qty</th>
+              <th>Value (₹)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- rows injected here -->
+          </tbody>
+        </table>
+        <p id="empty-msg" class="empty">No products yet — add one!</p>
+      </section>
+
+      <footer>
+        <small
+          >© 2026 Inventory Manager • Powered by JavaScript &
+          LocalStorage</small
+        >
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
