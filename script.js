@@ -1,8 +1,9 @@
-// Product Inventory Management (CRUD + LocalStorage)
+/* =====================================================
+   LOCAL STORAGE CONFIG
+===================================================== */
 
 const LS_KEY = "products_db_v1";
 
-/* ---------------- DOM ---------------- */
 const form = document.getElementById("product-form");
 const idInput = document.getElementById("product-id");
 const nameInput = document.getElementById("product-name");
@@ -26,7 +27,7 @@ const clearAllBtn = document.getElementById("clear-all");
 
 let products = [];
 
-/* ---------------- STORAGE ---------------- */
+/* ---------- STORAGE ---------- */
 const loadProducts = () => {
   try {
     products = JSON.parse(localStorage.getItem(LS_KEY)) || [];
@@ -38,7 +39,7 @@ const loadProducts = () => {
 const saveProducts = () =>
   localStorage.setItem(LS_KEY, JSON.stringify(products));
 
-/* ---------------- HELPERS ---------------- */
+/* ---------- HELPERS ---------- */
 const generateId = () =>
   "p_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
@@ -47,16 +48,18 @@ const formatMoney = (n) =>
 
 const generateSKU = (name = "") => {
   const base =
-    name.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6).toUpperCase() || "PRD";
+    name
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .slice(0, 6)
+      .toUpperCase() || "PRD";
   return base + "-" + Math.random().toString(36).slice(2, 6).toUpperCase();
 };
 
-/* ---------------- RENDER ---------------- */
+/* ---------- RENDER ---------- */
 function renderProducts() {
   let list = [...products];
   const q = searchInput.value.toLowerCase().trim();
 
-  // Search
   if (q) {
     list = list.filter(
       (p) =>
@@ -65,7 +68,6 @@ function renderProducts() {
     );
   }
 
-  // Sort
   const sortMap = {
     created_asc: (a, b) => a.createdAt - b.createdAt,
     created_desc: (a, b) => b.createdAt - a.createdAt,
@@ -76,6 +78,7 @@ function renderProducts() {
     qty_asc: (a, b) => a.qty - b.qty,
     qty_desc: (a, b) => b.qty - a.qty,
   };
+
   if (sortMap[sortSelect.value]) list.sort(sortMap[sortSelect.value]);
 
   tableBody.innerHTML = "";
@@ -88,8 +91,8 @@ function renderProducts() {
 
     tr.innerHTML = `
       <td>${i + 1}</td>
-      <td><b>${p.name}</b><br><small>${p.sku || ""}</small></td>
-      <td>${p.category || ""}</td>
+      <td><b>${p.name}</b><br><small>${p.sku}</small></td>
+      <td>${p.category}</td>
       <td>₹ ${formatMoney(p.price)}</td>
       <td>${p.qty}</td>
       <td>₹ ${formatMoney(value)}</td>
@@ -107,7 +110,7 @@ function renderProducts() {
   );
 }
 
-/* ---------------- CRUD ---------------- */
+/* ---------- CRUD ---------- */
 function addProduct(p) {
   products.push(p);
   saveProducts();
@@ -127,7 +130,7 @@ function removeProduct(id) {
   renderProducts();
 }
 
-/* ---------------- FORM ---------------- */
+/* ---------- FORM ---------- */
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -159,7 +162,7 @@ form.addEventListener("submit", (e) => {
   saveBtn.textContent = "Add Product";
 });
 
-/* ---------------- TABLE ACTIONS ---------------- */
+/* ---------- TABLE ACTIONS ---------- */
 tableBody.addEventListener("click", (e) => {
   const id = e.target.dataset.id;
   if (!id) return;
@@ -178,60 +181,10 @@ tableBody.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) removeProduct(id);
 });
 
-/* ---------------- SEARCH & SORT ---------------- */
+/* ---------- EVENTS ---------- */
 searchInput.addEventListener("input", renderProducts);
 sortSelect.addEventListener("change", renderProducts);
 
-/* ---------------- EXPORT ---------------- */
-exportBtn.addEventListener("click", () => {
-  const blob = new Blob([JSON.stringify(products, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "products_export.json";
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-/* ---------------- IMPORT ---------------- */
-importBtn.addEventListener("click", () => importFile.click());
-
-importFile.addEventListener("change", (e) => {
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    try {
-      const imported = JSON.parse(ev.target.result);
-      if (!Array.isArray(imported)) throw "Invalid file";
-
-      const map = new Map(products.map((p) => [p.id, p]));
-      imported.forEach((p) =>
-        map.set(p.id || generateId(), {
-          ...p,
-          sku: p.sku || generateSKU(p.name),
-        }),
-      );
-
-      products = [...map.values()];
-      saveProducts();
-      renderProducts();
-      alert("Import successful!");
-    } catch {
-      alert("Import failed");
-    }
-  };
-  reader.readAsText(e.target.files[0]);
-});
-
-/* ---------------- CLEAR ALL ---------------- */
-clearAllBtn.addEventListener("click", () => {
-  if (!confirm("Delete all products?")) return;
-  products = [];
-  saveProducts();
-  renderProducts();
-});
-
-/* ---------------- INIT ---------------- */
+/* ---------- INIT ---------- */
 loadProducts();
 renderProducts();
