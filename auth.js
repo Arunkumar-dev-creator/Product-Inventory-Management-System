@@ -31,7 +31,7 @@ if (registerForm) {
     saveUsers(users);
 
     alert("Account created! Please login");
-    window.location.href = "login.html";
+    window.location.href = "index.html"; // go to login
   });
 }
 
@@ -51,18 +51,20 @@ if (loginForm) {
     if (!user) return alert("Invalid credentials");
 
     localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-    window.location.href = "index.html";
+    window.location.href = "dashboard.html"; // go to dashboard
   });
 }
 
 /* ---------- Protect Dashboard ---------- */
-if (window.location.pathname.includes("index.html")) {
+if (window.location.pathname.includes("dashboard.html")) {
   const session = localStorage.getItem(SESSION_KEY);
-  if (!session) window.location.href = "login.html";
+  if (!session) {
+    window.location.href = "index.html"; // if not logged in
+  }
 }
 
 /* ---------- Logout ---------- */
 function logout() {
   localStorage.removeItem(SESSION_KEY);
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
