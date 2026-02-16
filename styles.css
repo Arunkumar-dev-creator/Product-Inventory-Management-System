@@ -6,7 +6,6 @@
   --accent: #06b6d4;
   --danger: #ef4444;
   --glass: rgba(255, 255, 255, 0.03);
-  --highlight: rgba(230, 255, 200, 0.14);
   --lowstock: rgba(255, 165, 0, 0.12);
 }
 
@@ -37,6 +36,13 @@ body {
   box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
 header h1 {
   margin: 0;
   font-size: 1.6rem;
@@ -64,10 +70,10 @@ footer {
 
 .product-form {
   background: var(--glass);
-  padding: 12px;
+  padding: 14px;
   border-radius: 10px;
   flex: 1;
-  min-width: 300px;
+  min-width: 280px;
 }
 
 .row {
@@ -104,6 +110,11 @@ button {
   background: var(--accent);
   color: #052025;
   font-weight: 600;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: translateY(-1px);
 }
 
 button.secondary {
@@ -137,6 +148,7 @@ button.danger {
 table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
 thead th {
@@ -179,14 +191,16 @@ tr.lowstock td {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 16px;
 }
 
 .auth-card {
-  width: 340px;
+  width: 100%;
+  max-width: 380px;
   padding: 28px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 10px 35px rgba(2, 6, 23, 0.7);
   text-align: center;
 }
@@ -197,16 +211,19 @@ tr.lowstock td {
 
 .auth-card input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 14px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: transparent;
   color: #fff;
+  font-size: 0.95rem;
 }
 
 .auth-card button {
   width: 100%;
+  padding: 12px;
+  font-size: 1rem;
 }
 
 .auth-switch {
@@ -221,7 +238,18 @@ tr.lowstock td {
 }
 
 /* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .container {
+    margin: 16px;
+  }
+}
+
 @media (max-width: 720px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .controls {
     flex-direction: column;
   }
@@ -233,5 +261,20 @@ tr.lowstock td {
   .stats {
     flex-direction: column;
     gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 22px;
+    border-radius: 12px;
+  }
+
+  header h1 {
+    font-size: 1.3rem;
+  }
+
+  table {
+    font-size: 0.85rem;
   }
 }
