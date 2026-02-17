@@ -28,16 +28,17 @@ const clearAllBtn = document.getElementById("clear-all");
 let products = [];
 
 /* ---------- STORAGE ---------- */
-const loadProducts = () => {
+function loadProducts() {
   try {
     products = JSON.parse(localStorage.getItem(LS_KEY)) || [];
   } catch {
     products = [];
   }
-};
+}
 
-const saveProducts = () =>
+function saveProducts() {
   localStorage.setItem(LS_KEY, JSON.stringify(products));
+}
 
 /* ---------- HELPERS ---------- */
 const generateId = () =>
@@ -48,10 +49,7 @@ const formatMoney = (n) =>
 
 const generateSKU = (name = "") => {
   const base =
-    name
-      .replace(/[^a-zA-Z0-9]/g, "")
-      .slice(0, 6)
-      .toUpperCase() || "PRD";
+    name.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6).toUpperCase() || "PRD";
   return base + "-" + Math.random().toString(36).slice(2, 6).toUpperCase();
 };
 
@@ -64,7 +62,7 @@ function renderProducts() {
     list = list.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
-        (p.category || "").toLowerCase().includes(q),
+        (p.category || "").toLowerCase().includes(q)
     );
   }
 
@@ -106,7 +104,7 @@ function renderProducts() {
 
   totalCountEl.textContent = products.length;
   totalValueEl.textContent = formatMoney(
-    products.reduce((s, p) => s + p.price * p.qty, 0),
+    products.reduce((sum, p) => sum + p.price * p.qty, 0)
   );
 }
 
@@ -140,8 +138,6 @@ form.addEventListener("submit", (e) => {
   const qty = Number(qtyInput.value);
 
   if (!name) return alert("Product name required");
-  if (price < 0 || !isFinite(price)) return alert("Invalid price");
-  if (qty < 0 || !Number.isInteger(qty)) return alert("Invalid quantity");
 
   if (idInput.value) {
     updateProduct(idInput.value, { name, category, price, qty });
@@ -168,6 +164,7 @@ tableBody.addEventListener("click", (e) => {
   if (!id) return;
 
   const p = products.find((x) => x.id === id);
+
   if (e.target.classList.contains("edit") && p) {
     idInput.value = p.id;
     nameInput.value = p.name;
@@ -181,9 +178,57 @@ tableBody.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) removeProduct(id);
 });
 
-/* ---------- EVENTS ---------- */
+/* ---------- SEARCH + SORT ---------- */
 searchInput.addEventListener("input", renderProducts);
 sortSelect.addEventListener("change", renderProducts);
+
+/* ---------- EXPORT JSON ---------- */
+exportBtn.addEventListener("click", () => {
+  if (!products.length) return alert("No products to export");
+
+  const blob = new Blob([JSON.stringify(products, null, 2)], {
+    type: "application/json",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "products.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ---------- IMPORT JSON ---------- */
+importBtn.addEventListener("click", () => importFile.click());
+
+importFile.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error();
+
+      products = data;
+      saveProducts();
+      renderProducts();
+      alert("Import successful");
+    } catch {
+      alert("Invalid JSON file");
+    }
+  };
+  reader.readAsText(file);
+});
+
+/* ---------- CLEAR ALL ---------- */
+clearAllBtn.addEventListener("click", () => {
+  if (!confirm("Delete all products?")) return;
+  products = [];
+  saveProducts();
+  renderProducts();
+});
 
 /* ---------- INIT ---------- */
 loadProducts();

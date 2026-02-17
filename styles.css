@@ -66,6 +66,7 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
+  margin-top: 20px;
 }
 
 .product-form {
@@ -121,6 +122,7 @@ button.secondary {
   background: transparent;
   color: var(--accent);
   border: 1px solid rgba(6, 182, 212, 0.2);
+ 
 }
 
 button.danger {
@@ -240,7 +242,7 @@ tr.lowstock td {
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .container {
-    margin: 100px;
+    margin: 20px;
   }
 }
 
@@ -269,12 +271,70 @@ tr.lowstock td {
     padding: 22px;
     border-radius: 12px;
   }
-
+ 
   header h1 {
     font-size: 1.3rem;
   }
 
   table {
     font-size: 0.85rem;
+  }
+}    
+
+/* ================= MOBILE AUTH IMPROVEMENT ================= */
+
+/* tablets */
+@media (max-width: 768px) {
+  .auth-body {
+    padding: 20px;
+    align-items: center;
+  }
+
+  .auth-card {
+    max-width: 420px;
+    width: 100%;
+    padding: 24px;
+  }
+}
+
+/* small mobiles */
+@media (max-width: 480px) {
+  .auth-body {
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+  }
+
+  .auth-card input {
+    padding: 11px;
+    font-size: 0.9rem;
+  }
+
+  .auth-card button {
+    padding: 11px;
+    font-size: 0.95rem;
+  }
+
+  .auth-switch {
+    font-size: 0.85rem;
+  }
+}
+
+/* very small devices */
+@media (max-width: 360px) {
+  .auth-card {
+    padding: 18px;
   }
 }
