@@ -134,7 +134,7 @@ button.danger {
 .tools {
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items:baseline;
   flex-wrap: wrap;
 }
 
@@ -193,7 +193,7 @@ tr.lowstock td {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 90vh;
   padding: 16px;
 }
 
